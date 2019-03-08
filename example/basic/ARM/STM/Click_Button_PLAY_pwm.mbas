@@ -1,0 +1,31 @@
+module Click_Button_PLAY_pwm
+
+include Click_Button_PLAY_types
+sub function  buttonplay_pwmInit(dim freq as uint16_t) as uint16_t 
+sub procedure buttonplay_pwmSetDuty(dim dutyRratio_ as uint32_t) 
+sub procedure buttonplay_pwmStart() 
+sub procedure buttonplay_pwmStop() 
+
+implements
+
+sub function  buttonplay_pwmInit(dim freq as uint16_t) as uint16_t 
+dim
+    dutyRratio_ as uint16_t 
+
+    dutyRratio_ = PWM_TIM5_Init(freq) 
+    result = dutyRratio_ 
+end sub
+
+sub procedure buttonplay_pwmSetDuty(dim dutyRratio_ as uint32_t) 
+    PWM_TIM5_Set_Duty(dutyRratio_, _PWM_NON_INVERTED, _PWM_CHANNEL1) 
+end sub
+
+sub procedure buttonplay_pwmStart() 
+    PWM_TIM5_Start(_PWM_CHANNEL1, @_GPIO_MODULE_TIM5_CH1_PA0) 
+end sub
+
+sub procedure buttonplay_pwmStop() 
+    PWM_TIM5_Stop(_PWM_CHANNEL1) 
+end sub
+
+end.

@@ -1,0 +1,31 @@
+module Click_Button_PLAY_pwm
+
+include Click_Button_PLAY_types
+sub function  buttonplay_pwmInit(dim freq as uint16_t) as uint16_t 
+sub procedure buttonplay_pwmSetDuty(dim duty as uint16_t) 
+sub procedure buttonplay_pwmStart() 
+sub procedure buttonplay_pwmStop() 
+
+implements
+
+sub function  buttonplay_pwmInit(dim freq as uint16_t) as uint16_t 
+dim
+    pwmPeriod as uint16_t 
+
+    pwmPeriod = PWM_T0CCP0_Init(freq, @_GPIO_MODULE_T0CCP0_D0_AHB) 
+    result = pwmPeriod 
+end sub
+
+sub procedure buttonplay_pwmSetDuty(dim duty as uint16_t) 
+    PWM_T0CCP0_Set_Duty(duty, _PWM_INVERTED_DISABLE) 
+end sub
+
+sub procedure buttonplay_pwmStart() 
+    PWM_T0CCP0_Start() 
+end sub
+
+sub procedure buttonplay_pwmStop() 
+    PWM_T0CCP0_Stop() 
+end sub
+
+end.

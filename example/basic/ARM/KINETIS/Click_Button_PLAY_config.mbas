@@ -1,0 +1,4 @@
+module Click_Button_PLAY_config
+
+include Click_Button_PLAY_types
+end.

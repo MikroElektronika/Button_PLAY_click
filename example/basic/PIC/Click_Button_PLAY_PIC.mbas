@@ -1,0 +1,71 @@
+'
+'Example for Button_PLAY Click
+'
+'    Date          : Dec 2018.
+'    Author        : Aleksandar Paunovic
+'
+'Test configuration PIC :
+'    
+'    MCU             : P18F87K22
+'    Dev. Board      : EasyPIC PRO v7
+'    PIC Compiler ver : v7.2.0.0
+'
+'---
+'
+'Description :
+'
+'The application is composed of three sections :
+'
+'- System Initialization - Initializes LOG, PWM pin as OUTPUT and INT pin as input
+'- Application Initialization - Initializes GPIO driver, initializes pwm, starts PWM output
+'- Application Task - Drives PWM pin output values from ZERO to MAX and back to ZERO continuously
+'
+program Click_Button_PLAY_PIC
+
+include Click_Button_PLAY_types
+include Click_Button_PLAY_config
+include Click_Button_PLAY_pwm
+dim
+    i as uint16_t 
+    frequency_ as uint16_t 
+    
+sub procedure systemInit() 
+    mikrobus_gpioInit(_MIKROBUS1, _MIKROBUS_INT_PIN, _GPIO_INPUT) 
+    mikrobus_gpioInit(_MIKROBUS1, _MIKROBUS_PWM_PIN, _GPIO_OUTPUT) 
+    mikrobus_logInit(_LOG_USBUART, 9600) 
+    Delay_ms(100) 
+    mikrobus_logWrite("> > > sys init done < < <", _LOG_LINE) 
+end sub
+
+sub procedure applicationInit() 
+    buttonplay_gpioDriverInit(T_BUTTONPLAY_P(@_MIKROBUS1_GPIO)) 
+    buttonplay_pwmInit(frequency_) 
+    Delay_ms(500) 
+    buttonplay_pwmStart() 
+    mikrobus_logWrite("> > > app init done < < <", _LOG_LINE) 
+end sub
+
+sub procedure applicationTask() 
+    i = 0
+    while (i < 255) 
+        buttonplay_pwmSetDuty(i) 
+        Delay_ms(3) 
+    i = (i + 1)
+    wend
+    i = 255
+    while (i > 0) 
+        buttonplay_pwmSetDuty(i) 
+        Delay_ms(3) 
+    i = (i - 1)
+    wend
+end sub
+
+main :
+    frequency_ = 5000
+
+    systemInit() 
+    applicationInit() 
+    while (1) 
+        applicationTask() 
+    wend
+end.

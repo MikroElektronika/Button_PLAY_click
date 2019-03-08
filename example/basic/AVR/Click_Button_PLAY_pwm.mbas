@@ -1,0 +1,28 @@
+module Click_Button_PLAY_pwm
+
+include Click_Button_PLAY_types
+sub function  buttonplay_pwmInit(dim duty as uint16_t) as uint16_t 
+sub procedure buttonplay_pwmSetDuty(dim duty as uint16_t) 
+sub procedure buttonplay_pwmStart() 
+sub procedure buttonplay_pwmStop() 
+
+implements
+
+sub function  buttonplay_pwmInit(dim duty as uint16_t) as uint16_t 
+    PWM16bit_Init(_PWM16_PHASE_CORRECT_MODE_8BIT, _PWM16_PRESCALER_16bit_8, _PWM16_NON_INVERTED, duty, 1) 
+    result = 0 
+end sub
+
+sub procedure buttonplay_pwmSetDuty(dim duty as uint16_t) 
+    PWM16bit_Init(_PWM16_PHASE_CORRECT_MODE_8BIT, _PWM16_PRESCALER_16bit_8, _PWM16_NON_INVERTED, duty, 1) 
+end sub
+
+sub procedure buttonplay_pwmStart() 
+    PWM16bit_Start(1) 
+end sub
+
+sub procedure buttonplay_pwmStop() 
+    PWM16bit_Stop(1) 
+end sub
+
+end.

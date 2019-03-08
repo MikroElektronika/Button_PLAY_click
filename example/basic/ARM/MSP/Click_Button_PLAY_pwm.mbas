@@ -1,0 +1,31 @@
+module Click_Button_PLAY_pwm
+
+include Click_Button_PLAY_types
+sub function  buttonplay_pwmInit(dim freq as uint16_t) as uint16_t 
+sub procedure buttonplay_pwmSetDuty(dim duty as uint16_t) 
+sub procedure buttonplay_pwmStart() 
+sub procedure buttonplay_pwmStop() 
+
+implements
+
+sub function  buttonplay_pwmInit(dim freq as uint16_t) as uint16_t 
+dim
+    pwmPeriod as uint16_t 
+
+    pwmPeriod = PWM0_Init(freq, (_PWM_CFG_CLOCK_SRC_SMCLK or _PWM_CFG_OUTPUTMODE_SET) or _PWM_CFG_CHANNEL_4, @_GPIO_MODULE_PWM_TA0_4_A15) 
+    result = pwmPeriod 
+end sub
+
+sub procedure buttonplay_pwmSetDuty(dim duty as uint16_t) 
+    PWM0_SetDuty(duty, _PWM_CFG_CHANNEL_4) 
+end sub
+
+sub procedure buttonplay_pwmStart() 
+    PWM0_Start() 
+end sub
+
+sub procedure buttonplay_pwmStop() 
+    PWM0_Stop() 
+end sub
+
+end.

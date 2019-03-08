@@ -1,0 +1,5 @@
+unit Click_Button_PLAY_config;
+
+uses Click_Button_PLAY_types;
+
+end.

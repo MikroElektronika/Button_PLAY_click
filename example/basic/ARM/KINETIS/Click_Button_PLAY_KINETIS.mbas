@@ -1,0 +1,73 @@
+'
+'Example for Button_PLAY Click
+'
+'    Date          : Dec 2018.
+'    Author        : Aleksandar Paunovic
+'
+'Test configuration KINETIS :
+'    
+'    MCU              : MK64
+'    Dev. Board       : HEXIWEAR
+'    ARM Compiler ver : v6.0.0.0
+'
+'---
+'
+'Description :
+'
+'The application is composed of three sections :
+'
+'- System Initialization - Initializes LOG, PWM pin as OUTPUT and INT pin as input
+'- Application Initialization - Initializes GPIO driver, initializes pwm, calculates max duty cycle value and starts PWM output
+'- Application Task - Drives PWM pin output values from ZERO to MAX and back to ZERO continuously
+'
+program Click_Button_PLAY_KINETIS
+
+include Click_Button_PLAY_types
+include Click_Button_PLAY_config
+include Click_Button_PLAY_pwm
+dim
+    i as uint16_t 
+    frequency_ as uint16_t 
+    dutyRatio as uint16_t 
+    
+sub procedure systemInit() 
+    mikrobus_gpioInit(_MIKROBUS1, _MIKROBUS_INT_PIN, _GPIO_INPUT) 
+    mikrobus_gpioInit(_MIKROBUS1, _MIKROBUS_PWM_PIN, _GPIO_OUTPUT) 
+    mikrobus_logInit(_MIKROBUS2, 9600) 
+    Delay_ms(100) 
+    mikrobus_logWrite("> > > sys init done < < <", _LOG_LINE) 
+end sub
+
+sub procedure applicationInit() 
+    buttonplay_gpioDriverInit(T_BUTTONPLAY_P(@_MIKROBUS1_GPIO)) 
+    dutyRatio = buttonplay_pwmInit(frequency_) 
+    dutyRatio = dutyRatio / 4 
+    Delay_ms(500) 
+    buttonplay_pwmStart() 
+    mikrobus_logWrite("> > > app init done < < <", _LOG_LINE) 
+end sub
+
+sub procedure applicationTask() 
+    i = 0
+    while (i < dutyRatio) 
+        buttonplay_pwmSetDuty(i) 
+        Delay_ms(3) 
+    i = (i + 1)
+    wend
+    i = dutyRatio
+    while (i > 0) 
+        buttonplay_pwmSetDuty(i) 
+        Delay_ms(3) 
+    i = (i - 1)
+    wend
+end sub
+
+main :
+    frequency_ = 32000
+
+    systemInit() 
+    applicationInit() 
+    while (1) 
+        applicationTask() 
+    wend
+end.

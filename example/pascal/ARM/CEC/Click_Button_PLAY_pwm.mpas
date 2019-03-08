@@ -1,0 +1,35 @@
+unit Click_Button_PLAY_pwm;
+
+uses Click_Button_PLAY_types;
+
+function  buttonplay_pwmInit(freq : uint16_t) :  uint16_t; 
+procedure buttonplay_pwmSetDuty(duty : uint16_t); 
+procedure buttonplay_pwmStart(); 
+procedure buttonplay_pwmStop(); 
+
+implementation
+
+function  buttonplay_pwmInit(freq : uint16_t) :  uint16_t; 
+var
+    pwmPeriod : uint16_t; 
+begin
+    pwmPeriod := PWM0_Init(freq); 
+    result := pwmPeriod; 
+end;
+
+procedure buttonplay_pwmSetDuty(duty : uint16_t); 
+begin
+    PWM0_Set_Duty(duty, _PWM_NON_INVERTED); 
+end;
+
+procedure buttonplay_pwmStart(); 
+begin
+    PWM0_Start(); 
+end;
+
+procedure buttonplay_pwmStop(); 
+begin
+    PWM0_Stop(); 
+end;
+
+end.
